@@ -1,4 +1,4 @@
-Sub CadenceAvgPerHour()
+Sub cadennceavg()
     'cleanup values
     Range("J3:J60000").ClearContents
     Range("K3:K60000").ClearContents
@@ -18,34 +18,34 @@ Sub CadenceAvgPerHour()
     sum = 0
     
     For i = 3 To numRows
+      k = i + 1
+      cadenceHour = Mid(Cells(i, timeCol), 13, 2)
+      nextCadenceHour = Mid(Cells(k, timeCol), 13, 2)
+      cadenceVal = Cells(i, cadenceCol)
+    
+      If cadenceHour <> "" Then
         k = i + 1
-        cadenceHour = Mid(Cells(i, timeCol), 13, 2)
-        nextCadenceHour = Mid(Cells(k, timeCol), 13, 2)
-        cadenceVal = Cells(i, cadenceCol)
-        
-        If cadenceHour <> "" Then
-            k = i + 1
-            If cadenceHour < nextCadenceHour And cadCount <> 0 Then
-                Cells(i, avgCadPerHourCol) = (sum / cadCount)
-                Cells(i, 11) = sum
-                Cells(i, 12) = cadCount
-                sum = 0
-                cadCount = 0
-			ElseIf (cadenceHour = 23 And cadCount <> 0) Or (i = numRows) Then
-				Cells(i, avgCadPerHourCol) = (sum / cadCount)
-                Cells(i, 11) = sum
-                Cells(i, 12) = cadCount
-                sum = 0
-                cadCount = 0
-            ElseIf (cadenceHour < nextCadenceHour Or cadenceHour = 23) And cadCount = 0 Then
-                Cells(i, avgCadPerHourCol) = 0
-                Cells(i, 11) = sum
-                Cells(i, 12) = cadCount
-            End If
-            If cadenceVal <> "0" Then
-                sum = sum + cadenceVal
-                cadCount = cadCount + 1
-            End If
+        If cadenceHour < nextCadenceHour And cadCount <> 0 Then
+          Cells(i, avgCadPerHourCol) = (sum / cadCount)
+          Cells(i, 11) = sum
+          Cells(i, 12) = cadCount
+          sum = 0
+          cadCount = 0
+        ElseIf (cadenceHour = 23 And cadCount <> 0 And nextCadenceHour = "") Or (i = numRows) Then
+          Cells(i, avgCadPerHourCol) = (sum / cadCount)
+          Cells(i, 11) = sum
+          Cells(i, 12) = cadCount
+          sum = 0
+          cadCount = 0
+        ElseIf (cadenceHour < nextCadenceHour Or (cadenceHour = 23 And nextCadenceHour = "")) And cadCount = 0 Then
+          Cells(i, avgCadPerHourCol) = 0
+          Cells(i, 11) = sum
+          Cells(i, 12) = cadCount
         End If
+        If cadenceVal <> "0" Then
+          sum = sum + cadenceVal
+          cadCount = cadCount + 1
+        End If
+    End If
     Next i
 End Sub
